@@ -18,6 +18,7 @@ u"""This module provides a class for managing a BIG-IP."""
 from copy import copy
 import logging
 from time import time
+import json
 
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -404,7 +405,6 @@ class BigIPProxy(object):
         LOGGER.debug(
             "Retrieving fdb tunnels from BIG-IP /%s...", self._partition)
         tunnels = self._bigip.tm.net.fdb.tunnels.get_collection()
-
         # Refresh the arp cache
         self._arps = {
             a.name: self._create_resource(IcrArp, a)

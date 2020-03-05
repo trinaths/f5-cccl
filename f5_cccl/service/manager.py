@@ -217,15 +217,45 @@ class ServiceConfigDeployer(object):
     def _get_user_tunnel_tasks(self, desired):
         """Get the update tasks for user-created fdb tunnels."""
         all_tunnels = self._bigip.get_fdb_tunnels(all_tunnels=True)
+       
         # Get only the tunnels we desire
+        #LOGGER.debug("ABHI: all_tunnels final -->")
+        #LOGGER.debug(type(all_tunnels))
+        #r = (base64.b64encode(json.dumps(all_tunnels))).decode("utf-8")
+        #LOGGER.debug(r)
+        #logging.debug('{}={}'.format(k, json.dumps(v)) for k, v in all_tunnels.items())
+       
+        #LOGGER.debug("ABHI: desired -->")
+        #LOGGER.debug("%s", json.dumps(desired))
+       
+        
         update_list = set(desired) & set(all_tunnels)
+        LOGGER.debug("ABHI:: set update_list -->")
+        for resource in update_list:
+            message = '%s' % (resource)
+            LOGGER.debug(message)
+        #LOGGER.debug("ABHI: set of update_list -->")
+        #LOGGER.debug("%s", json.dumps(update_list))
+        LOGGER.debug("ABHI:: all_tunnels[vxlan-tunnel-mp]  -->")
+        LOGGER.debug(all_tunnels["vxlan-tunnel-mp"])
+       
+        LOGGER.debug("ABHI:: desired[vxlan-tunnel-mp]  -->")
+        LOGGER.debug(desired["vxlan-tunnel-mp"])
         update_list = [
             desired[resource] for resource in update_list
             if desired[resource] != all_tunnels[resource]
+           
         ]
-
+        #LOGGER.debug("ABHI: final update_list -->")
+        #LOGGER.debug("%s", json.dumps(update_list))
+        LOGGER.debug("update_list is of type -->")
+        LOGGER.debug(type(update_list))
+        LOGGER.debug("Bhavya is Great -->")
+        for i in range(0, len(update_list)):
+            message = '%s:%s' % (i, update_list[i])
+            LOGGER.debug(message)
         return update_list
-
+ 
     # pylint: disable=too-many-locals
     def _desired_nodes(self, default_route_domain):
         """Desired nodes is inferred from the active pool members."""
